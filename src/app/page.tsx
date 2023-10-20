@@ -20,6 +20,7 @@ interface ExchangeData {
   amount: string;
   base_currency_code: string;
   base_currency_name: string;
+  target_currency_code: string;
   rates: Rates;
   status: string;
   updated_date: string;
@@ -32,7 +33,7 @@ export default function Home() {
   
   const [ originCurrency, setOriginCurrency ] = useState('BRL')
   const [ targetCurrency, setTargetCurrency ] = useState('USD')
-  const [ amount, setamount ] = useState('')
+  const [ amount, setamount ] = useState('10')
 
   const [ exchangeData, setExchangeData ] = useState({} as ExchangeData)
 
@@ -53,7 +54,7 @@ export default function Home() {
     const response = await fetch(`https://api.getgeoapi.com/v2/currency/convert?api_key=${API_KEY}&from=${originCurrency}&to=${targetCurrency}&amount=${amount}&format=json`)
     const data = await response.json()
     console.log(data)
-    setExchangeData(data)
+    setExchangeData({...data, target_currency_code: targetCurrency})
   }
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function Home() {
       </form>
       { (Object.keys(exchangeData).length > 0) && (
         <div>
-          {exchangeData.amount} {exchangeData.base_currency_name} = {exchangeData.rates[targetCurrency].rate_for_amount} {exchangeData.rates[targetCurrency].currency_name}
+          {exchangeData.amount} {exchangeData.base_currency_name} = {exchangeData.rates[exchangeData.target_currency_code].rate_for_amount} {exchangeData.rates[exchangeData.target_currency_code].currency_name}
         </div>
       ) }
     </main>
