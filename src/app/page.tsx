@@ -1,60 +1,9 @@
-"use client"
+"use client";
 
-import { useEffect, useState, FormEvent, ChangeEvent } from 'react'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend
-} from "recharts";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100
-  }
-];
+import { useEffect, useState, FormEvent, ChangeEvent } from "react";
+import { Provider } from "react-redux";
+import { FavoriteCurrencies } from "./components/FavoriteCurrencies";
+import store from "./store/store";
 
 interface Currency {
   acronym: string;
@@ -79,101 +28,79 @@ interface ExchangeData {
   updated_date: string;
 }
 
-const API_KEY = 'c27c9425a38679f734f1a6b278eec778a4d3045d'
+const API_KEY = "c27c9425a38679f734f1a6b278eec778a4d3045d";
 
 export default function Home() {
-  const [ currencies, setCurrencies ] = useState([] as Currency[])
-  
-  const [ originCurrency, setOriginCurrency ] = useState('BRL')
-  const [ targetCurrency, setTargetCurrency ] = useState('USD')
-  const [ amount, setamount ] = useState('10')
+  const [currencies, setCurrencies] = useState([] as Currency[]);
 
-  const [ exchangeData, setExchangeData ] = useState({} as ExchangeData)
+  const [originCurrency, setOriginCurrency] = useState("BRL");
+  const [targetCurrency, setTargetCurrency] = useState("USD");
+  const [amount, setamount] = useState("10");
+
+  const [exchangeData, setExchangeData] = useState({} as ExchangeData);
 
   async function getData() {
-    const response = await fetch(`https://api.getgeoapi.com/v2/currency/list?api_key=${API_KEY}`)
-    const data = await response.json()
-    
-    const newCurrencies = []
-    for(const c in data.currencies) {
-      newCurrencies.push({ acronym: c, fullName: data.currencies[c] })
+    const response = await fetch(`https://api.getgeoapi.com/v2/currency/list?api_key=${API_KEY}`);
+    const data = await response.json();
+
+    const newCurrencies = [];
+    for (const c in data.currencies) {
+      newCurrencies.push({ acronym: c, fullName: data.currencies[c] });
     }
-    setCurrencies(newCurrencies)
+    setCurrencies(newCurrencies);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const response = await fetch(`https://api.getgeoapi.com/v2/currency/convert?api_key=${API_KEY}&from=${originCurrency}&to=${targetCurrency}&amount=${amount}&format=json`)
-    const data = await response.json()
-    console.log(data)
-    setExchangeData({...data, target_currency_code: targetCurrency})
+    const response = await fetch(`https://api.getgeoapi.com/v2/currency/convert?api_key=${API_KEY}&from=${originCurrency}&to=${targetCurrency}&amount=${amount}&format=json`);
+    const data = await response.json();
+    console.log(data);
+    setExchangeData({ ...data, target_currency_code: targetCurrency });
   }
 
   useEffect(() => {
-    getData()  
-  }, [])
-
+    getData();
+  }, []);
 
   return (
-    <main>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Value
-          <input type="number" value={amount} onChange={(event: ChangeEvent<HTMLInputElement>) => setamount(event.target.value)}/>
-        </label>
-        <label>
-          From
-          <select
-            name="from"
-            onChange={(event: ChangeEvent<HTMLSelectElement>) => setOriginCurrency(event.target.value)}
-            value={originCurrency}
-          >
-            {currencies.map(currency => <option key={currency.acronym} value={currency.acronym}>{currency.acronym} - {currency.fullName}</option>)}
-          </select>
-        </label>
-        <label>
-          To
-          <select
-            name="to"
-            onChange={(event: ChangeEvent<HTMLSelectElement>) => setTargetCurrency(event.target.value)}
-            value={targetCurrency}
-          >
-            {currencies.map(currency => <option key={currency.acronym} value={currency.acronym}>{currency.acronym} - {currency.fullName}</option>)}
-          </select>
-        </label>
-        <button type="submit">Convert</button>
-      </form>
-      { (Object.keys(exchangeData).length > 0) && (
-        <div>
-          {exchangeData.amount} {exchangeData.base_currency_name} = {exchangeData.rates[exchangeData.target_currency_code].rate_for_amount} {exchangeData.rates[exchangeData.target_currency_code].currency_name}
-        </div>
-      ) }
+    <Provider store={store}>
+      <main>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Value
+            <input type="number" value={amount} onChange={(event: ChangeEvent<HTMLInputElement>) => setamount(event.target.value)} />
+          </label>
+          <label>
+            From
+            <select name="from" onChange={(event: ChangeEvent<HTMLSelectElement>) => setOriginCurrency(event.target.value)} value={originCurrency}>
+              {currencies.map((currency) => (
+                <option key={currency.acronym} value={currency.acronym}>
+                  {currency.acronym} - {currency.fullName}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            To
+            <select name="to" onChange={(event: ChangeEvent<HTMLSelectElement>) => setTargetCurrency(event.target.value)} value={targetCurrency}>
+              {currencies.map((currency) => (
+                <option key={currency.acronym} value={currency.acronym}>
+                  {currency.acronym} - {currency.fullName}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit">Convert</button>
+        </form>
+        {Object.keys(exchangeData).length > 0 && (
+          <div>
+            {exchangeData.amount} {exchangeData.base_currency_name} = {exchangeData.rates[exchangeData.target_currency_code].rate_for_amount} {exchangeData.rates[exchangeData.target_currency_code].currency_name}
+          </div>
+        )}
 
-      <LineChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line
-          type="monotone"
-          dataKey="pv"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
-        />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-      </LineChart>
-    </main>
-  )
+        <FavoriteCurrencies />
+      </main>
+    </Provider>
+  );
 }
