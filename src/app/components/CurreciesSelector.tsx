@@ -1,7 +1,6 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addCurrency, removeCurrency, selectAllCurrenciesList, selectCurrencies, setAllCurrenciesList } from "../store/currenciesReducer";
-import { Currency } from "../types/Currency";
+import { selectAllCurrenciesList, setAllCurrenciesList } from "../store/appStateReducer";
 
 const API_KEY = "c27c9425a38679f734f1a6b278eec778a4d3045d";
 

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import currenciesReducer from "./currenciesReducer";
+import appStateReducer from "./appStateReducer";
+import userInfoReducer from "./userInfoReducer";
 
 export const store = configureStore({
   reducer: {
-    currencies: currenciesReducer,
+    appState: appStateReducer,
+    userInfo: userInfoReducer,
   },
 });
 
