@@ -6,6 +6,7 @@ export function Navbar() {
       <Link href="/">
         <i>Money Logo</i>
       </Link>
+      <Link href="/signup">Sign in</Link>
       <Link href="/login">Login</Link>
     </nav>
   );

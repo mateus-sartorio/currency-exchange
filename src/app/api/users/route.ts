@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@/app/lib/mongodb";
+import { connect } from "@/dbConfig/dbConfig";
 
 export async function GET() {
   let client;
