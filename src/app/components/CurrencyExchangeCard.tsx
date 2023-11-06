@@ -1,29 +1,15 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { Currency } from "../types/Currency";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { ExchangeData } from "../types/ExchangeData";
 import { CurreciesSelector } from "./CurreciesSelector";
 
 const API_KEY = "c27c9425a38679f734f1a6b278eec778a4d3045d";
 
 export function CurrencyExchangeCard() {
-  const [currencies, setCurrencies] = useState([] as Currency[]);
-
   const [originCurrency, setOriginCurrency] = useState("BRL");
   const [targetCurrency, setTargetCurrency] = useState("USD");
   const [amount, setamount] = useState("10");
 
   const [exchangeData, setExchangeData] = useState({} as ExchangeData);
-
-  async function getData() {
-    const response = await fetch(`https://api.getgeoapi.com/v2/currency/list?api_key=${API_KEY}`);
-    const data = await response.json();
-
-    const newCurrencies = [];
-    for (const c in data.currencies) {
-      newCurrencies.push({ acronym: c, fullName: data.currencies[c] });
-    }
-    setCurrencies(newCurrencies);
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,10 +18,6 @@ export function CurrencyExchangeCard() {
     const data = await response.json();
     setExchangeData({ ...data, target_currency_code: targetCurrency });
   }
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <>

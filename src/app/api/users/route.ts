@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@/app/lib/mongodb";
-
-type ResponseData = {
-  message: string;
-};
+import { connect } from "@/dbConfig/dbConfig";
 
 export async function GET() {
   let client;
@@ -17,5 +14,5 @@ export async function GET() {
   const db = client.db("currency-exchange");
   const data = await db.collection("users").find({}).toArray();
 
-  return new Response(JSON.stringify(data));
+  return new Response(JSON.stringify({ "a-b": "b" }));
 }

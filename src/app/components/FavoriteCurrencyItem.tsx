@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeCurrency, selectReferenceCurrency } from "../store/currenciesReducer";
+import { removeFavoriteCurrency, selectReferenceCurrency } from "../store/userInfoReducer";
 import { ExchangeData } from "../types/ExchangeData";
 
 interface propsType {
@@ -31,7 +31,7 @@ export default function FavoriteCurrencyItem(props: propsType) {
     <div>
       <div>{acronym}</div>
       <div>{exchange}</div>
-      <i onClick={() => dispatch(removeCurrency(acronym))} />
+      <i onClick={() => dispatch(removeFavoriteCurrency(acronym))} />
     </div>
   );
 }
