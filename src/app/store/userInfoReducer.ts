@@ -31,6 +31,9 @@ export const currenciesSlice = createSlice({
     setReferenceCurrency: (state, action: PayloadAction<string>) => {
       state.referenceCurrency = action.payload;
     },
+    setFavoriteCurrencies: (state, action: PayloadAction<string[]>) => {
+      state.favoriteCurrencies = action.payload;
+    },
     addFavoriteCurrency: (state, action: PayloadAction<string>) => {
       state.favoriteCurrencies = [...state.favoriteCurrencies, action.payload];
     },
@@ -40,7 +43,7 @@ export const currenciesSlice = createSlice({
   },
 });
 
-export const { setFirstName, setLastName, setEmail, setUsername, setReferenceCurrency, addFavoriteCurrency, removeFavoriteCurrency } = currenciesSlice.actions;
+export const { setFirstName, setLastName, setEmail, setUsername, setReferenceCurrency, setFavoriteCurrencies, addFavoriteCurrency, removeFavoriteCurrency } = currenciesSlice.actions;
 
 export const selectFirstName = (state: RootState) => state.userInfo.firstName;
 export const selectLastName = (state: RootState) => state.userInfo.lastName;

@@ -3,7 +3,6 @@ export interface UserInfo {
   lastName: string;
   email: string;
   username: string;
-  password: string;
   referenceCurrency: string;
   favoriteCurrencies: string[];
 }
