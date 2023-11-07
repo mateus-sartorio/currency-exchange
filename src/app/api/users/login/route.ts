@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
 
     const user = await User.findOne({ email });
 
+    console.log(user);
+
     mongoose.connection.close();
 
     if (!user) {

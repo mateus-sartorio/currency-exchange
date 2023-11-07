@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setFirstName, setLastName, setEmail, setUsername, setReferenceCurrency, setFavoriteCurrencies } from "../store/userInfoReducer";
+import { setFirstName, setLastName, setEmail, setUsername, setReferenceCurrency, setFavoriteCurrencies, setPassword } from "../store/userInfoReducer";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -11,12 +11,12 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const [formEmail, setFormEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formPassword, setFormPassword] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    const response = await fetch(`http://localhost:3000/api/users/login?email=${formEmail}&password=${password}`, {
+    const response = await fetch(`http://localhost:3000/api/users/login?email=${formEmail}&password=${formPassword}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -26,13 +26,14 @@ export default function Login() {
     const data = await response.json();
     // console.log(data);
 
-    const { firstName, lastName, username, email, referenceCurrency, favoriteCurrencies } = data.user;
+    const { firstName, lastName, username, password, email, referenceCurrency, favoriteCurrencies } = data.user;
 
     if (data.success === true) {
       dispatch(setFirstName(firstName));
       dispatch(setLastName(lastName));
       dispatch(setEmail(email));
       dispatch(setUsername(username));
+      dispatch(setPassword(password));
       dispatch(setReferenceCurrency(referenceCurrency));
       dispatch(setFavoriteCurrencies(favoriteCurrencies));
 

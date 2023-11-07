@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 
 connect();
 
-export async function GET() {}
-
 export async function POST(request: Request) {
   try {
     const requestBody: any = await request.json();
